@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>划词翻译</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --fg: #1f2328;
+      --muted: #57606a;
+      --line: #d0d7de;
+      --field: #f6f8fa;
+      --accent: #0f6cbd;
+      --accent-fg: #ffffff;
+      --error: #cf222e;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1f2328;
+        --fg: #e6edf3;
+        --muted: #9198a1;
+        --line: #3d444d;
+        --field: #2a3038;
+        --accent: #4aa3f0;
+        --accent-fg: #0b1620;
+        --error: #ff7b72;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      width: 340px; margin: 0; padding: 14px 16px 12px;
+      background: var(--bg); color: var(--fg);
+      font: 13px/1.5 "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+    }
+    h1 { margin: 0 0 10px; font-size: 15px; font-weight: 600; }
+    textarea {
+      width: 100%; height: 72px; padding: 8px 10px; resize: vertical;
+      border: 1px solid var(--line); border-radius: 8px; background: var(--field); color: inherit; font: inherit;
+    }
+    textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+    .row { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+    .grow { flex: 1; }
+    button {
+      padding: 6px 16px; border: 0; border-radius: 6px; background: var(--accent); color: var(--accent-fg);
+      font: inherit; cursor: pointer;
+    }
+    button:disabled { opacity: .6; cursor: default; }
+    button.secondary { background: var(--field); color: var(--fg); border: 1px solid var(--line); width: 100%; }
+    input[type="checkbox"] { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
+    .tip[hidden] { display: none; }
+    #result {
+      margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: var(--field);
+      white-space: pre-wrap; word-break: break-word; user-select: text;
+    }
+    #result.error { color: var(--error); }
+    #result[hidden] { display: none; }
+    hr { margin: 14px 0 10px; border: 0; border-top: 1px solid var(--line); }
+    label { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
+    select {
+      width: 190px; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px;
+      background: var(--field); color: inherit; font: inherit;
+    }
+    .tip { margin: 12px 0 0; font-size: 12px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <h1>划词翻译</h1>
+
+  <textarea id="input" placeholder="输入要翻译的文字…(Ctrl+Enter 翻译)"></textarea>
+  <div class="row">
+    <span class="grow" id="status"></span>
+    <button id="go">翻译</button>
+  </div>
+  <div id="result" hidden></div>
+
+  <hr>
+
+  <label>目标语言
+    <select id="targetLang"></select>
+  </label>
+  <label>优先翻译源
+    <select id="engine">
+      <option value="google">Google 翻译(推荐)</option>
+      <option value="mymemory">MyMemory</option>
+    </select>
+  </label>
+  <label>划词后
+    <select id="trigger">
+      <option value="icon">显示小图标,点击翻译</option>
+      <option value="auto">直接弹出翻译</option>
+      <option value="off">不自动触发(仅右键/快捷键)</option>
+    </select>
+  </label>
+
+  <label>用本扩展的阅读器打开 PDF
+    <input type="checkbox" id="pdfViewer">
+  </label>
+  <div class="row">
+    <button id="openPdf" class="secondary">用阅读器打开当前页面的 PDF</button>
+  </div>
+  <p class="tip" id="pdfStatus" hidden></p>
+
+  <p class="tip">Edge 自带的 PDF 阅读器不支持划词翻译,所以 PDF 要用本扩展的阅读器打开。打开本地 PDF 需在 edge://extensions 里该扩展的「详细信息」中开启「允许访问文件网址」。</p>
+  <p class="tip">选中文字后按 Alt+T 或右键「翻译」也可翻译。快捷键可在 edge://extensions/shortcuts 修改。某个翻译源不可用时会自动切换到另一个。</p>
+
+  <script src="popup.js"></script>
+</body>
+</html>
